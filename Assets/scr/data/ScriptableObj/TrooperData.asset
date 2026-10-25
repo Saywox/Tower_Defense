@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EntityData
   deathEffect: {fileID: 0}
   baseStats:
-    maxHealth: 0
-    mSpeed: 0
-    dmg: 0
-    atkSpeed: 0
+    maxHealth: 100
+    mSpeed: 2
+    dmg: 1
+    atkSpeed: 1
+    atkCoolDown: 1

@@ -6,5 +6,6 @@ public struct EntityStats
     public float mSpeed;
     public float dmg;
     public float atkSpeed;
+    public float atkCoolDown;
 
 }

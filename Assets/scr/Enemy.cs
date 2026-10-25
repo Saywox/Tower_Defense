@@ -10,10 +10,11 @@ public class Enemy : Entity
         enemyMovement.Initialize(this);
     }
 
-    void Update()
+    private protected override void Update()
     {
         if (isDead) return;
         enemyMovement.Handle();
+        AttackHandler.Handle();
     }
 
 }
