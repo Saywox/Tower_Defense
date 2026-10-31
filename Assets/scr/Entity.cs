@@ -5,10 +5,10 @@ public class Entity : MonoBehaviour
     [Header("System variables")]
     [SerializeField] private EntityAttackHandler attackHandler;
     public EntityData data;
+    public Entity target;
     public EntityStats stats;
     public Allegiance allegiance;
     public float health;
-
     public bool isDead = false;
     public EntityAttackHandler AttackHandler => attackHandler;
 

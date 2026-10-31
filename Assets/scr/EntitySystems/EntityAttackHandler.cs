@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class EntityAttackHandler : EntitySystem
 {
-    [SerializeField] private float attackRadius = 0.5f;
+    public float attackRadius = 0.5f;
     [SerializeField] private float attackTimer = 0;
     [SerializeField] private LayerMask entityLayer;
     [SerializeField] private TargetPriority attackPrioriity;
+    public Enemy EnemyRef => entity as Enemy;
     public override void Initialize(Entity entityRef)
     {
         entity = entityRef;
@@ -30,8 +31,8 @@ public class EntityAttackHandler : EntitySystem
 
     private void Attack()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, attackRadius, entityLayer);
-        List<Entity> hitEntities = new List<Entity>();
+        //Collider[] hits = Physics.OverlapSphere(transform.position, attackRadius, entityLayer);
+        //List<Entity> hitEntities = new List<Entity>();
         //AOE
         //foreach (Collider hit in hits)
         //{
@@ -42,21 +43,14 @@ public class EntityAttackHandler : EntitySystem
         //    hitEntity.ChangeHealth(entity.stats.dmg);
         //}
 
-        foreach (Collider hit in hits)
-        {
-            if (!hit.TryGetComponent(out Entity hitEntity)) continue;
-            if (hitEntities.Contains(hitEntity)) continue;
-            if (hitEntity.allegiance == entity.allegiance) continue;
-            hitEntities.Add(hitEntity);
-            
-        }
-        Entity target = TargetProritiser.GetPrioritisedEntity(attackPrioriity, entity, hitEntities);
-        target.ChangeHealth(entity.stats.dmg);
-
+        if (entity.target == null)
+            return;
+        if (EnemyRef.EnemyMovement.DistanceToTarget() <= attackRadius)
+            entity.target.ChangeHealth(entity.stats.dmg);
     }
 
     private void OnDrawGizmosSelected()
-    { 
+    {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
