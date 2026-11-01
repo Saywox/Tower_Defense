@@ -4,6 +4,7 @@ public class Entity : MonoBehaviour
 {
     [Header("System variables")]
     [SerializeField] private EntityAttackHandler attackHandler;
+    [SerializeField] private EntityVisuals visuals;
     public EntityData data;
     public Entity target;
     public EntityStats stats;
@@ -11,6 +12,7 @@ public class Entity : MonoBehaviour
     public float health;
     public bool isDead = false;
     public EntityAttackHandler AttackHandler => attackHandler;
+    public EntityVisuals Visuals => visuals;
 
 
     private void Start()
@@ -47,5 +49,6 @@ public class Entity : MonoBehaviour
         stats = data.BaseStats;
         health = stats.maxHealth;
         attackHandler?.Initialize(this);
+        visuals?.Initialize(this);
     }
 }
