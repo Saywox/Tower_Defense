@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyMovement : EntitySystem
 {
     public Enemy EnemyRef => entity as Enemy;
+
     [Header("Navigation Variables")]
     public NavMeshAgent navMeshAgent;
 
@@ -27,36 +30,79 @@ public class EnemyMovement : EntitySystem
     private void HandleMovement()
     {
         if (EnemyRef.target == null) return;
-            navMeshAgent.SetDestination(EnemyRef.target.transform.position);
+        if (!HasPathToEntity(EnemyRef.target) && !EnemyRef.IsTargetWall())
+        {
+            EnemyRef.target = null;
+            return;
+        }
+
+        if (NavMesh.SamplePosition(EnemyRef.target.transform.position, out NavMeshHit hit, 2, NavMesh.AllAreas))
+            navMeshAgent.SetDestination(hit.position);
 
     }
     private void HandleTargetSearching()
     {
         if (EnemyRef.target != null) return;
-        float closestEnemyDistance = Mathf.Infinity;
+
         Collider[] entitiesInProximity = Physics.OverlapSphere(EnemyRef.transform.position, targetSearchRadius, entityLayer);
         entitiesInProximity = Array.FindAll(entitiesInProximity, x => x.GetComponent<Entity>().allegiance != EnemyRef.allegiance);
-        foreach (Collider entity in entitiesInProximity)
+        entitiesInProximity = entitiesInProximity.OrderBy(x => (x.transform.position - EnemyRef.transform.position).sqrMagnitude).ToArray();
+
+        if (TryGetKingdom(entitiesInProximity, out Entity kingdom))
         {
-            if (entity == null) continue;
-            float distance = Vector3.Distance(EnemyRef.transform.position, entity.transform.position);
-            if (distance < closestEnemyDistance)
+            if (kingdom != null && HasPathToEntity(kingdom))
             {
-                closestEnemyDistance = distance;
-                EnemyRef.target = entity.GetComponent<Entity>();
+                EnemyRef.target = kingdom;
+                return;
+            }
+        }
+
+        foreach (Collider entityColl in entitiesInProximity)
+        {
+            if (!entityColl.TryGetComponent(out Entity entity))
+                break;
+
+            if (EnemyRef.IsTargetWall(entity))
+            {
+                EnemyRef.target = entity;
+                break;
             }
 
-
+            if (HasPathToEntity(entity))
+            {
+                EnemyRef.target = entity;
+                break;
+            }
         }
     }
 
+    private bool TryGetKingdom(Collider[] entitiesInProximity, out Entity foundKingdom)
+    {
+        var entities = new List<Entity>();
+
+        foreach (Collider coll in entitiesInProximity)
+        {
+            if (coll.TryGetComponent(out Entity s))
+                entities.Add(s);
+        }
+
+        foundKingdom = entities.First(x => x == EnemyRef.enemyManager.kingdom);
+        bool hasFoundKingdom = foundKingdom != null;
+        return hasFoundKingdom;
+    }
+
+    private bool HasPathToEntity(Entity entity)
+    {
+        NavMeshPath path = new NavMeshPath();
+        bool validPath = navMeshAgent.CalculatePath(entity.transform.position, path) && path.status == NavMeshPathStatus.PathComplete;
+        return validPath;
+    }
 
     public float DistanceToTarget()
     {
         return Vector3.Distance(entity.transform.position, entity.target.transform.position);
 
     }
-
 
     private void OnDrawGizmosSelected()
     {

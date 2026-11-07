@@ -1,7 +1,12 @@
+using System;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    public static event Action<Entity> OnDeath;
+    public static event Action<Entity, Entity> OnHealthChange;
+
+
     [Header("System variables")]
     [SerializeField] private EntityAttackHandler attackHandler;
     [SerializeField] private EntityVisuals visuals;
@@ -27,21 +32,22 @@ public class Entity : MonoBehaviour
         if (isDead) return;
         attackHandler?.Handle();
     }
-    public void ChangeHealth(float healthChange) 
+    public void ChangeHealth(float healthChange, Entity origin) 
     {
         health -= healthChange;
         health = Mathf.Clamp(health, 0, stats.maxHealth);
+        OnHealthChange?.Invoke(this, origin);
         if (health <= 0)
-        {
             DestroyEntity();
-        }
     }
 
     public virtual void DestroyEntity()
     {
         if (isDead) return;
         isDead = true;
-        Instantiate(data.DeathEffect, transform.position, Quaternion.identity);
+        CallDeathEvent();
+        if (data.DeathEffect != null)
+            Instantiate(data.DeathEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
     private protected virtual void Initialize()
@@ -50,5 +56,10 @@ public class Entity : MonoBehaviour
         health = stats.maxHealth;
         attackHandler?.Initialize(this);
         visuals?.Initialize(this);
+    }
+
+    private protected void CallDeathEvent()
+    {
+        OnDeath?.Invoke(this);
     }
 }

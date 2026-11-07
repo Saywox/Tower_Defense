@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1710696318863997379}
   - component: {fileID: 4276277296902206799}
   - component: {fileID: 127045659333886016}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mesh_Archer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 6393898793998316100}
   - component: {fileID: 4846981087092347088}
   - component: {fileID: 5483981160687721306}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Hat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 4183637239179920688}
   - component: {fileID: 3987099094283510086}
   - component: {fileID: 3412751306379166757}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Defense_Archer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

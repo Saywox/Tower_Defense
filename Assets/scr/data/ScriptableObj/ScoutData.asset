@@ -17,4 +17,5 @@ MonoBehaviour:
     maxHealth: 25
     mSpeed: 1.5
     dmg: 1
-    atkSpeed: 0.2
+    atkSpeed: 1
+    atkCoolDown: 1

@@ -3,9 +3,10 @@ using UnityEngine;
 public class Defense : Entity
 {
     [SerializeField] private DefensePlacement placement;
+    [SerializeField] private DefenseType defenseType;
 
     public DefensePlacement Placement => placement;
-
+    public DefenseType DefenseType => defenseType;
     public bool isPlaced = false;
 
     private protected override void Initialize()

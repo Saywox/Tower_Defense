@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7112921805144400188}
   - component: {fileID: 4381604152631463742}
   - component: {fileID: 4970253046678090157}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Defense_Bomber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,6 +85,7 @@ MonoBehaviour:
   health: 0
   isDead: 0
   placement: {fileID: 4970253046678090157}
+  defenseType: 1
   isPlaced: 0
 --- !u!114 &7112921805144400188
 MonoBehaviour:
@@ -152,7 +153,7 @@ GameObject:
   - component: {fileID: 3042517874211950944}
   - component: {fileID: 9031568323774319008}
   - component: {fileID: 7271235892185278056}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Hat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,7 +243,7 @@ GameObject:
   - component: {fileID: 7177492050756404922}
   - component: {fileID: 7795083187936315179}
   - component: {fileID: 4909819552186745782}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mesh_Bomber
   m_TagString: Untagged
   m_Icon: {fileID: 0}

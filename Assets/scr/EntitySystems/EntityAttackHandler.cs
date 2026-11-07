@@ -46,7 +46,7 @@ public class EntityAttackHandler : EntitySystem
         if (entity.target == null)
             return;
         if (EnemyRef.EnemyMovement.DistanceToTarget() <= attackRadius)
-            entity.target.ChangeHealth(entity.stats.dmg);
+            entity.target.ChangeHealth(entity.stats.dmg, entity);
     }
 
     private void OnDrawGizmosSelected()

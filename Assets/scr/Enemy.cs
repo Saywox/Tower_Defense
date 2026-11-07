@@ -3,8 +3,11 @@ using UnityEngine;
 public class Enemy : Entity
 {
     [SerializeField] private EnemyMovement enemyMovement;
-    public EnemyMovement EnemyMovement => enemyMovement;
+    [SerializeField] private EnemyType type;
+    public EnemyManager enemyManager;
 
+    public EnemyMovement EnemyMovement => enemyMovement;
+    public EnemyType EnemyType => type;
 
 
     private protected override void Initialize()
@@ -20,4 +23,10 @@ public class Enemy : Entity
         AttackHandler.Handle();
     }
 
+    public bool IsTargetWall(Entity potentialTarget = null)
+    {
+        if (target != null)
+            potentialTarget = target;
+        return potentialTarget is Defense && (potentialTarget as Defense).DefenseType == DefenseType.Wall;
+    }
 }

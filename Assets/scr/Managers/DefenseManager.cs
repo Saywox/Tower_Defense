@@ -1,8 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class DefenseManager : MonoBehaviour
 {
+    private const string AVAILABLE_UNITS = "Available units: ";
     public Camera cam;
     [SerializeField] private GameObject[] defensePrefabs;
 
@@ -11,16 +14,12 @@ public class DefenseManager : MonoBehaviour
     public LayerMask groundLayer;
     public Material placeableMaterial;
     public Material unplaceableMaterial;
+    [SerializeField] private TextMeshProUGUI unitsText;
+    [SerializeField] private Button[] defenseButtons;
+    [SerializeField] private int availableUnits = 3;
     public float gridSize = 0.5f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         HandlePlacementInputs();
     }
@@ -31,14 +30,29 @@ public class DefenseManager : MonoBehaviour
             return;
         if (Mouse.current.leftButton.wasPressedThisFrame && 
             currentlySelectedDefense.Placement.placeable)
+        {
+            availableUnits--;
+            unitsText.text = $"{AVAILABLE_UNITS}{availableUnits}";
+            if (availableUnits == 0)
+            {
+                foreach (var button in defenseButtons)
+                    button.interactable = false;
+            }
+
             currentlySelectedDefense.Placement.Place();
+        }
         if (Keyboard.current.rKey.wasPressedThisFrame)
             currentlySelectedDefense.Placement.Rotate();
+        if (Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            Destroy(currentlySelectedDefense.gameObject);
+            currentlySelectedDefense = null;
+        }
     }
 
     public void Btn_SpawnDefense(int index)
     {
-        if (currentlySelectedDefense != null)
+        if (currentlySelectedDefense != null || availableUnits == 0)
             return;
 
         GameObject defenseinstance = Instantiate(defensePrefabs[index], Vector3.zero, Quaternion.identity);

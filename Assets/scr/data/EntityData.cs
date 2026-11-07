@@ -8,7 +8,4 @@ public class EntityData : ScriptableObject
 
     public GameObject DeathEffect => deathEffect;
     public EntityStats BaseStats => baseStats;
-
-
-
 }
